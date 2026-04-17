@@ -46,7 +46,7 @@ def main():
     )
     set_seed(cfg.seed)
 
-    # IMPORTANT: this matches your current mg.envs.CarBusGame
+    # matches  current mg.envs.CarBusGame
     env = add_set_state(
         CarBusGame(
             grid_size=3,
