@@ -18,6 +18,69 @@ def solve_minimax(M: np.ndarray):
     """Solve max_pi min_j sum_i pi_i M[i,j] for zero-sum.
     Returns (V, pi) where pi is row player's mixed strategy.
     """
+    """
+    Solve max_pi min_j sum_i pi_i M[i,j] for zero-sum.
+
+    =========================
+    EXAMPLE (Car-Bus State)
+    =========================
+
+    Suppose the Q matrix is:
+
+            Bus →
+           U    D    L    R
+    Car U  1.0  2.0  0.5  1.2
+        D  2.1  1.5  3.0  0.8
+        L  0.2  1.0  2.2  1.1
+        R  3.0  0.5  1.0  2.0
+
+    Each entry represents:
+        Q(s, a_car, a_bus)
+
+    STEP 1: Pure strategies fail
+    ----------------------------------
+    If car always chooses RIGHT:
+        Row = [3.0, 0.5, 1.0, 2.0]
+
+    Bus picks worst column:
+        min = 0.5  ❌
+
+    → exploitable strategy
+
+    STEP 2: Solve for mixed strategy π
+    ----------------------------------
+    We find probabilities π such that:
+
+        π = [0.1, 0.2, 0.1, 0.6]
+
+    This spreads probability across actions to avoid exploitation.
+
+    STEP 3: Compute expected value per column
+    ----------------------------------
+
+    Column U = 2.34
+    Column D = 0.9   ← WORST
+    Column L = 1.47
+    Column R = 1.59
+
+    STEP 4: Final value
+    ----------------------------------
+    V(s) = min column = 0.9
+
+    Interpretation:
+    The opponent (bus) will always pick the worst-case column.
+
+    So this function returns:
+        v  = 0.9
+        pi = [0.1, 0.2, 0.1, 0.6]
+
+    =========================
+    KEY IDEA
+    =========================
+    - M = possible outcomes
+    - pi = best strategy under adversary
+    - v = guaranteed value of the game
+    """
     M = _sanitize(M)
     n, m = M.shape
     # Variables: pi_0..pi_{n-1}, v
